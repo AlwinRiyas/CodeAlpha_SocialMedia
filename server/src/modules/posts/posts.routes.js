@@ -1,17 +1,29 @@
 import { Router } from 'express'
-import { getFeed } from './posts.service.js'
+import { authenticate } from '../../middleware/authenticate.js'
+import { createPostForUser, getFeed, getPost, removePost } from './posts.service.js'
 
 export const postsRouter = Router()
 
 postsRouter.get('/', async (req, res, next) => {
   try {
-    const data = await getFeed({
-      cursor: req.query.cursor,
-      limit: req.query.limit,
-    })
-
+    const data = await getFeed({ cursor: req.query.cursor, limit: req.query.limit })
     res.status(200).json({ data })
-  } catch (error) {
-    next(error)
-  }
+  } catch (error) { next(error) }
+})
+
+postsRouter.get('/:postId', async (req, res, next) => {
+  try { res.status(200).json({ data: await getPost(req.params.postId) }) }
+  catch (error) { next(error) }
+})
+
+postsRouter.post('/', authenticate, async (req, res, next) => {
+  try { res.status(201).json({ data: await createPostForUser(req.user.id, req.body) }) }
+  catch (error) { next(error) }
+})
+
+postsRouter.delete('/:postId', authenticate, async (req, res, next) => {
+  try {
+    await removePost(req.user.id, req.params.postId)
+    res.status(204).send()
+  } catch (error) { next(error) }
 })
