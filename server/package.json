@@ -1,0 +1,21 @@
+{
+  "name": "codealpha-socialmedia-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "helmet": "latest",
+    "morgan": "latest"
+  },
+  "devDependencies": {
+    "eslint": "latest"
+  }
+}
