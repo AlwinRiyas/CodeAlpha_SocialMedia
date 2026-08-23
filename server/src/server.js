@@ -5,13 +5,12 @@ import app from './app.js'
 import { env } from './config/env.js'
 
 const httpServer = http.createServer(app)
-const io = new Server(httpServer, { cors: { origin: env.nodeEnv === 'production' ? process.env.CLIENT_URL : true } })
-
+const io = new Server(httpServer, { cors: { origin: env.clientUrl } })
 io.use((socket, next) => {
   try {
     const token = socket.handshake.auth?.token
-    if (!token || !process.env.JWT_SECRET) return next(new Error('Unauthorized'))
-    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    if (!token) return next(new Error('Unauthorized'))
+    const payload = jwt.verify(token, env.jwtSecret)
     if (!payload?.sub) return next(new Error('Unauthorized'))
     socket.userId = payload.sub
     next()
