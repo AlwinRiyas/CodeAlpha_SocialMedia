@@ -9,6 +9,7 @@ import { commentsRouter } from './modules/comments/comments.routes.js'
 import { feedRouter } from './modules/feed/feed.routes.js'
 import { followsRouter } from './modules/follows/follows.routes.js'
 import { likesRouter } from './modules/likes/likes.routes.js'
+import { notificationsRouter } from './modules/notifications/notifications.routes.js'
 import { postsRouter } from './modules/posts/posts.routes.js'
 import { usersRouter } from './modules/users/users.routes.js'
 import { healthRouter } from './routes/health.routes.js'
@@ -27,6 +28,7 @@ app.use('/api/comments', commentsRouter)
 app.use('/api/likes', likesRouter)
 app.use('/api/follows', followsRouter)
 app.use('/api/feed', feedRouter)
+app.use('/api/notifications', notificationsRouter)
 
 app.use(notFoundHandler)
 app.use(errorHandler)
