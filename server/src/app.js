@@ -15,11 +15,11 @@ import { usersRouter } from './modules/users/users.routes.js'
 import { healthRouter } from './routes/health.routes.js'
 
 const app = express()
+app.disable('x-powered-by')
 app.use(helmet())
-app.use(cors({ origin: env.nodeEnv === 'production' ? process.env.CLIENT_URL : true }))
+app.use(cors({ origin: env.clientUrl, methods: ['GET', 'POST', 'PATCH', 'DELETE'], allowedHeaders: ['Content-Type', 'Authorization'] }))
 app.use(express.json({ limit: '1mb' }))
 app.use(morgan(env.nodeEnv === 'production' ? 'combined' : 'dev'))
-
 app.use('/api/health', healthRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
@@ -29,7 +29,6 @@ app.use('/api/likes', likesRouter)
 app.use('/api/follows', followsRouter)
 app.use('/api/feed', feedRouter)
 app.use('/api/notifications', notificationsRouter)
-
 app.use(notFoundHandler)
 app.use(errorHandler)
 export default app
