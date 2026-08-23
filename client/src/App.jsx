@@ -39,7 +39,9 @@ function App() {
 
   return <div className="app-shell">
     <aside className="sidebar"><div className="brand">Connect<span>.</span></div><nav><button className={view === 'home' ? 'nav-button active' : 'nav-button'} onClick={() => setView('home')}>Home</button><button className={view === 'profile' ? 'nav-button active' : 'nav-button'} onClick={() => setView('profile')}>Profile</button></nav><button className="primary-button" onClick={logout}>Logout</button></aside>
-    {view === 'profile' ? <ProfileView user={user} onBack={() => setView('home')} /> : <main className="feed"><header className="feed-header"><div><p className="eyebrow">Signed in as @{user.username}</p><h1>Home</h1></div><span className="online">● Live</span></header><form className="composer" onSubmit={publishPost}><textarea value={content} onChange={(event) => setContent(event.target.value)} maxLength="2000" placeholder="What is happening?" /><div className="composer-footer"><span>{content.length}/2000</span><button className="primary-button" type="submit">Post</button></div></form>{error && <p className="form-error">{error}</p>}<section className="post-list">{posts.map((post) => <PostCard key={post.id} post={post} onLike={toggleLike} />)}</section></main>}
+    {view === 'profile'
+      ? <ProfileView user={user} onBack={() => setView('home')} onUpdated={setUser} />
+      : <main className="feed"><header className="feed-header"><div><p className="eyebrow">Signed in as @{user.username}</p><h1>Home</h1></div><span className="online">● Live</span></header><form className="composer" onSubmit={publishPost}><textarea value={content} onChange={(event) => setContent(event.target.value)} maxLength="2000" placeholder="What is happening?" /><div className="composer-footer"><span>{content.length}/2000</span><button className="primary-button" type="submit">Post</button></div></form>{error && <p className="form-error">{error}</p>}<section className="post-list">{posts.map((post) => <PostCard key={post.id} post={post} onLike={toggleLike} />)}</section></main>}
   </div>
 }
 export default App
