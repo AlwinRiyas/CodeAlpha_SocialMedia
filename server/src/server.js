@@ -1,8 +1,14 @@
-import 'dotenv/config'
 import app from './app.js'
+import { env } from './config/env.js'
 
-const PORT = Number(process.env.PORT) || 5000
-
-app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`)
+const server = app.listen(env.port, () => {
+  console.log(`API server running on http://localhost:${env.port}`)
 })
+
+function shutdown(signal) {
+  console.log(`${signal} received. Shutting down gracefully.`)
+  server.close(() => process.exit(0))
+}
+
+process.on('SIGINT', () => shutdown('SIGINT'))
+process.on('SIGTERM', () => shutdown('SIGTERM'))
