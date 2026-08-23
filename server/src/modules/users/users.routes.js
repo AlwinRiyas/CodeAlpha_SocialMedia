@@ -1,7 +1,12 @@
 import { Router } from 'express'
+import { authenticate } from '../../middleware/authenticate.js'
 import { getUserProfile } from './users.service.js'
 
 export const usersRouter = Router()
+
+usersRouter.get('/me', authenticate, (req, res) => {
+  res.status(200).json({ data: req.user })
+})
 
 usersRouter.get('/:username', async (req, res, next) => {
   try {
