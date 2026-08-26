@@ -19,7 +19,7 @@ function App() {
   const [unread, setUnread] = useState(0)
 
   async function loadFeed() { try { const data = await api('/posts'); setPosts(data.items) } catch (err) { setError(err.message) } }
-  async function loadUnread() { try { const data = await api('/notifications/unread-count'); setUnread(data.count) } catch {} }
+  async function loadUnread() { try { const data = await api('/notifications/unread-count'); setUnread(data.count) } catch (err) { console.warn('Unable to load unread notifications', err) } }
 
   useEffect(() => { if (!getToken()) return; api('/users/me').then((currentUser) => { setUser(currentUser); return Promise.all([loadFeed(), loadUnread()]) }).catch(() => clearToken()) }, [])
   useEffect(() => {
