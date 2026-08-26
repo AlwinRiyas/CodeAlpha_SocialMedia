@@ -1,0 +1,11 @@
+import { Router } from 'express'
+import { prisma } from '../lib/prisma.js'
+
+export const healthRouter = Router()
+healthRouter.get('/live', (req, res) => res.status(200).json({ status: 'ok' }))
+healthRouter.get('/', async (req, res, next) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`
+    res.status(200).json({ status: 'ok', database: 'connected' })
+  } catch (error) { next(error) }
+})
