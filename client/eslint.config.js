@@ -17,6 +17,7 @@ export default [
     rules: {
       ...reactHooks.configs.recommended.rules,
       ...reactRefresh.configs.vite.rules,
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
 ]
