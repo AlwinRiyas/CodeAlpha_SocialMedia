@@ -1,6 +1,18 @@
 {
-  "name":"codealpha-socialmedia-server","private":true,"version":"0.2.0","type":"module",
-  "scripts":{"dev":"node --watch src/server.js","start":"node src/server.js","lint":"eslint .","test":"node --test","prisma:generate":"prisma generate","prisma:migrate":"prisma migrate dev","prisma:studio":"prisma studio"},
+  "name":"codealpha-socialmedia-server",
+  "private":true,
+  "version":"0.3.0",
+  "type":"module",
+  "scripts":{
+    "dev":"node --watch src/server.js",
+    "start":"node src/server.js",
+    "lint":"eslint .",
+    "test":"node --test",
+    "prisma:generate":"prisma generate",
+    "prisma:migrate":"prisma migrate dev",
+    "prisma:studio":"prisma studio",
+    "seed":"node prisma/seed.js"
+  },
   "dependencies":{"@prisma/client":"6.19.0","cors":"latest","dotenv":"latest","express":"latest","helmet":"latest","jsonwebtoken":"latest","morgan":"latest","socket.io":"latest"},
   "devDependencies":{"eslint":"latest","prisma":"6.19.0"}
 }
