@@ -6,11 +6,16 @@ A full-stack social media platform developed as **Project 2** of the CodeAlpha F
 
 - User registration and JWT authentication
 - User profiles with validated updates
+- People discovery with search by name, username, or bio
+- Suggested people ranked by community activity
+- Connection requests with accept/decline workflow
+- Mutual connection creation after acceptance
 - Posts, comments, likes, follows, and feed
-- Persistent notifications
+- Persistent notifications for social activity and connection requests
 - Real-time notification delivery with Socket.IO
 - Request validation and centralized error handling
 - Helmet, restricted CORS, body-size limits, and environment validation
+- Seeded demo network for local development and portfolio demonstrations
 - Automated linting, tests, and production client builds through GitHub Actions
 
 ## Technology stack
@@ -49,10 +54,13 @@ cp .env.example .env
 npm install
 npm run prisma:generate
 npm run prisma:migrate
+npm run seed
 npm run dev
 ```
 
 Configure `DATABASE_URL`, `JWT_SECRET`, and `CLIENT_URL` in `.env`.
+
+The seed creates six fictional developer/design/technology accounts, sample posts, follows, and a pending connection request. Demo password: `Demo@12345`.
 
 ### Client
 
@@ -63,6 +71,16 @@ npm run dev
 ```
 
 Use `VITE_SOCKET_URL` when the API/socket server is not running at `http://localhost:5000`.
+
+## Social workflow
+
+1. Open **Discover** to browse suggested people.
+2. Search by name, username, or bio.
+3. Open a profile or use **Connect** directly from a person card.
+4. The recipient receives a connection request notification.
+5. The recipient accepts or declines from **Discover → Connection requests**.
+6. Accepted requests create a mutual connection and follow relationship.
+7. Continue interacting through posts, likes, comments, follows, and notifications.
 
 ## Quality checks
 
@@ -82,7 +100,7 @@ npm run build
 
 ## Current status
 
-**Phase 9 — Production Hardening: Complete**
+**Phase 10 — Social Discovery & Connections: Complete**
 
 ## Internship
 
