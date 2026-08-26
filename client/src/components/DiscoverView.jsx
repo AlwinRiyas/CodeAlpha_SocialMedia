@@ -40,7 +40,7 @@ export function DiscoverView() {
   }
 
   async function loadRequests() {
-    try { const data = await api('/connections/requests/incoming'); setRequests(data) } catch {}
+    try { const data = await api('/connections/requests/incoming'); setRequests(data) } catch (err) { console.warn('Unable to load connection requests', err) }
   }
 
   useEffect(() => { loadPeople(''); loadRequests() }, [])
