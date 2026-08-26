@@ -1,11 +1,15 @@
 import { Router } from 'express'
 import { authenticate } from '../../middleware/authenticate.js'
-import { getUserProfile, updateProfile } from './users.service.js'
+import { discoverPeople, getUserProfile, updateProfile } from './users.service.js'
 
 export const usersRouter = Router()
 
 usersRouter.get('/me', authenticate, (req, res) => {
   res.status(200).json({ data: req.user })
+})
+
+usersRouter.get('/discover', authenticate, async (req, res, next) => {
+  try { res.status(200).json({ data: await discoverPeople(req.user.id, req.query.q) }) } catch (error) { next(error) }
 })
 
 usersRouter.patch('/me', authenticate, async (req, res, next) => {
