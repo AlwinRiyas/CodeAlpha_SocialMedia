@@ -50,11 +50,10 @@ async function main() {
     ['sarahwilson', 'emmadavis'], ['sarahwilson', 'mayapatel'],
     ['danielkim', 'ryanthomas'], ['danielkim', 'alexmorgan'],
     ['mayapatel', 'alexmorgan'], ['ryanthomas', 'danielkim'],
-    ['emmadavis', 'sarahwilson'], ['emmadavis', 'mayaapatel'],
+    ['emmadavis', 'sarahwilson'], ['emmadavis', 'mayapatel'],
   ]
 
   for (const [follower, following] of followPairs) {
-    if (!users[follower] || !users[following]) continue
     await prisma.follow.upsert({
       where: { followerId_followingId: { followerId: users[follower].id, followingId: users[following].id } },
       update: {},
