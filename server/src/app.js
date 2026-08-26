@@ -6,6 +6,7 @@ import { env } from './config/env.js'
 import { errorHandler, notFoundHandler } from './middleware/error-handler.js'
 import { authRouter } from './modules/auth/auth.routes.js'
 import { commentsRouter } from './modules/comments/comments.routes.js'
+import { connectionsRouter } from './modules/connections/routes.js'
 import { feedRouter } from './modules/feed/feed.routes.js'
 import { followsRouter } from './modules/follows/follows.routes.js'
 import { likesRouter } from './modules/likes/likes.routes.js'
@@ -23,6 +24,7 @@ app.use(morgan(env.nodeEnv === 'production' ? 'combined' : 'dev'))
 app.use('/api/health', healthRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/connections', connectionsRouter)
 app.use('/api/posts', postsRouter)
 app.use('/api/comments', commentsRouter)
 app.use('/api/likes', likesRouter)
