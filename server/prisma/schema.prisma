@@ -22,6 +22,8 @@ model User {
   likes        Like[]
   following    Follow[]       @relation("UserFollowing")
   followers    Follow[]       @relation("UserFollowers")
+  sentRequests ConnectionRequest[] @relation("ConnectionRequestSender")
+  receivedRequests ConnectionRequest[] @relation("ConnectionRequestReceiver")
   notifications Notification[] @relation("NotificationRecipient")
   activity     Notification[] @relation("NotificationActor")
 }
@@ -72,6 +74,21 @@ model Follow {
 
   @@id([followerId, followingId])
   @@index([followingId])
+}
+
+model ConnectionRequest {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  status     String   @default("PENDING")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  sender     User @relation("ConnectionRequestSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User @relation("ConnectionRequestReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([receiverId, status, createdAt])
+  @@index([senderId, status, createdAt])
 }
 
 model Notification {
