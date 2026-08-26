@@ -8,6 +8,7 @@ export function notFoundHandler(req, res) {
 }
 
 export function errorHandler(error, req, res, next) {
+  void next
   console.error(error)
 
   if (error.code === 'P2002') {
