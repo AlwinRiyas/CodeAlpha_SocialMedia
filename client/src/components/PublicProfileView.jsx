@@ -5,24 +5,27 @@ export function PublicProfileView({ username, onBack }) {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [following, setFollowing] = useState(false)
+  const [connection, setConnection] = useState('LOADING')
 
   useEffect(() => {
     setLoading(true); setError('')
-    api(`/users/${username}`).then((data) => setProfile(data)).catch((err) => setError(err.message)).finally(() => setLoading(false))
+    Promise.all([api(`/users/${username}`)]).then(([data]) => setProfile(data)).catch((err) => setError(err.message)).finally(() => setLoading(false))
   }, [username])
 
-  async function toggleFollow() {
-    try {
-      await api(`/follows/${profile.id}`, { method: following ? 'DELETE' : 'POST' })
-      setFollowing(!following)
-      setProfile({ ...profile, _count: { ...profile._count, followers: Math.max(0, profile._count.followers + (following ? -1 : 1)) } })
-    } catch (err) { setError(err.message) }
+  useEffect(() => {
+    if (!profile) return
+    api(`/connections/state/${profile.id}`).then((data) => setConnection(data.status)).catch(() => setConnection('NONE'))
+  }, [profile])
+
+  async function connect() {
+    try { await api(`/connections/${profile.id}`, { method: 'POST' }); setConnection('PENDING_SENT') } catch (err) { setError(err.message) }
   }
 
   if (loading) return <main className="profile-view"><p>Loading profile…</p></main>
-  if (error) return <main className="profile-view"><button className="text-button" onClick={onBack}>← Back</button><p className="form-error">{error}</p></main>
+  if (error && !profile) return <main className="profile-view"><button className="text-button" onClick={onBack}>← Back</button><p className="form-error">{error}</p></main>
   if (!profile) return null
+
+  const actionLabel = { LOADING: 'Checking…', PENDING_SENT: 'Requested', PENDING_RECEIVED: 'Respond in Discover', CONNECTED: 'Connected', NONE: 'Connect' }[connection]
 
   return <main className="profile-view">
     <button className="text-button" onClick={onBack}>← Back to feed</button>
@@ -31,7 +34,8 @@ export function PublicProfileView({ username, onBack }) {
       <div><p className="eyebrow">Member</p><h1>{profile.displayName}</h1><p className="profile-handle">@{profile.username}</p></div>
       <p className="profile-bio">{profile.bio || 'No bio added yet.'}</p>
       <div className="profile-stats"><span><strong>{profile._count?.posts ?? 0}</strong> Posts</span><span><strong>{profile._count?.followers ?? 0}</strong> Followers</span><span><strong>{profile._count?.following ?? 0}</strong> Following</span></div>
-      <button className="primary-button" onClick={toggleFollow}>{following ? 'Unfollow' : 'Follow'}</button>
+      <button className="primary-button" disabled={connection !== 'NONE'} onClick={connect}>{actionLabel}</button>
+      {error && <p className="form-error">{error}</p>}
     </section>
   </main>
 }
