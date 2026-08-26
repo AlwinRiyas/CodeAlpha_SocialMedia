@@ -1,21 +1,29 @@
 import { AppError } from '../../utils/app-error.js'
-import { findUserById, findUserByUsername, updateUserProfile } from './users.repository.js'
+import { findUserById, findUserByUsername, searchUsers, discoverUsers, updateUserProfile } from './users.repository.js'
 
 function validateHttpUrl(value, field) {
   if (!value) return null
   try { const url = new URL(value); if (!['http:', 'https:'].includes(url.protocol)) throw new Error(); return url.toString() }
   catch { throw new AppError(`${field} must be a valid HTTP or HTTPS URL`, { statusCode: 400, code: 'VALIDATION_ERROR', expose: true }) }
 }
+
 export async function getUserProfile(username) {
   const user = await findUserByUsername(username)
   if (!user) throw new AppError('User not found', { statusCode: 404, code: 'USER_NOT_FOUND', expose: true })
   return user
 }
+
 export async function getUserById(id) {
   const user = await findUserById(id)
   if (!user) throw new AppError('User not found', { statusCode: 404, code: 'USER_NOT_FOUND', expose: true })
   return user
 }
+
+export async function discoverPeople(userId, query = '') {
+  const value = String(query).trim().slice(0, 80)
+  return value ? searchUsers(value, userId) : discoverUsers(userId)
+}
+
 export async function updateProfile(id, payload = {}) {
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new AppError('Invalid request body', { statusCode: 400, code: 'VALIDATION_ERROR', expose: true })
   const allowed = ['displayName', 'bio', 'avatarUrl']
