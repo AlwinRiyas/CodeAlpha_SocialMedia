@@ -14,5 +14,5 @@
     "seed":"node prisma/seed.js"
   },
   "dependencies":{"@prisma/client":"6.19.0","cors":"latest","dotenv":"latest","express":"latest","helmet":"latest","jsonwebtoken":"latest","morgan":"latest","socket.io":"latest"},
-  "devDependencies":{"eslint":"latest","prisma":"6.19.0"}
+  "devDependencies":{"eslint":"latest","@eslint/js":"latest","prisma":"6.19.0"}
 }
